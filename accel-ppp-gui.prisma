@@ -1,0 +1,394 @@
+#!/usr/local/bin/prisma
+
+
+/**┌────────────────────────────────────────────────────────────────────┐ 
+ * │████████████████████████████████████████████████████████████████████│ 
+ * ├────────────────────────────────────────────────────────────────────┤ 
+ * │                 Accel-ppp-gui - Interface gráfica                  │ 
+ * │                                                                    │ 
+ * │    Autor  : Rafael Alves Lemos  - Telemos Multimidia LTDA          │ 
+ * │    Versão : 1.0                                                    │ 
+ * │    Licença: X                                                      │ 
+ * │    Dependências: prisma ou lua e servidor http com cgi habilitado  │ 
+ * │                  accel-ppp                                         │ 
+ * ├────────────────────────────────────────────────────────────────────┤ 
+ * │████████████████████████████████████████████████████████████████████│ 
+ * └────────────────────────────────────────────────────────────────────┘ 
+ * 
+ Copyright (c) <2017> <Rafael Alves Lemos - Telemos Multimídia LTDA>
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ pt.BR: ESTA LICENÇA PERMITE O USO, CÓPIA, MODIFICAÇÃO, PUBLICAÇÃO, DISTRIBUIÇÃO
+ SUBLICENCIAR, OU VENDER COPIAS DESTE APLICATIVO NAS SEGUINTES CONDIÇÕES:
+
+ A informação acima e sua permissão inclui todas as cópias ou porções substanciais 
+ deste sistema.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+
+
+ **/
+
+
+
+local cgi = inclua'pcgi';
+//local sql = inclua'sqlite3';
+local html = inclua'html';
+local classe = inclua'classe';
+TabelaJavascript = {}
+sis.deflocal("pt_BR.UTF-8")  
+imprima([[
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!--
+/**
+ * ******************************************************************** 
+ *                                                                     *
+ *                  Accel-ppp-gui - Interface grafica                  *
+ *                                                                     *
+ *     Author  : Rafael Alves Lemos  - Telemos Multimidia LTDA         *
+ *     Version : 1.0                                                   *
+ *     Licence : X                                                     *
+ *     Dependencies: prisma or lua and http server with cgi enabled    *
+ *                   accel-ppp                                         *
+ *                                                                     *
+ *                                                                     *
+ * ******************************************************************* *
+
+ Copyright (c) <2017> <Rafael Alves Lemos - Telemos Multimídia LTDA>
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ pt.BR: ESTA LICENÇA PERMITE O USO, CÓPIA, MODIFICAÇÃO, PUBLICAÇÃO, DISTRIBUIÇÃO
+ SUBLICENCIAR, OU VENDER COPIAS DESTE APLICATIVO NAS SEGUINTES CONDIÇÕES:
+
+ A informação acima e sua permissão inclui todas as cópias ou porções substanciais 
+ deste sistema.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ **/
+-->
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="description" content="Accel-ppp-gui é uma interface gráfica para o servior accel-ppp desenvolvida por Rafael Alves Lemos">
+  <meta name="keywords" content="accel-ppp, Accel-ppp-gui, graphical user interface, pppoe-server">
+  <title>Accel-ppp-gui | Clientes Conectados</title>
+
+  <!-- FONTES CSS-->
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css">
+</head>
+
+<body>
+
+  <!-- //////////////////////////////////////////////////////////////////////////// -->
+
+  <!-- INÍCIO DO CABEÇALHO -->
+  <header id="header" class="page-topbar">
+        <!-- início da barra do cabaçalho-->
+		  <nav>
+		    <div class="nav-wrapper">
+		      <a href="#" class="brand-logo">Accel-ppp-gui</a>
+
+		    </div>
+		  </nav>
+        <!-- fim da barra do cabeçalho -->
+  </header>
+  <!-- FIM DO CABEÇALHO -->
+
+
+
+  <!-- INÍCIO PRINCIPAL -->
+  <div id="main">
+    <!-- INÍCIO EMBRULHO -->
+    <div class="wrapper">
+
+
+      <!-- INÍCIO DO CONTEÚDO-->
+      <section id="content">
+        
+        <!-- início do miolo -->
+        <div id="breadcrumbs-wrapper" class=" grey lighten-3">
+
+          <div class="container">
+            <div class="row">
+              <div class="col s12 m12 l12">
+                <h2 class="center">Accel-ppp-gui | Clientes Conectados</h2>
+                <p></p>
+               </div>
+            </div>
+          </div>
+        </div>
+        <!-- fim do miolo -->
+        
+
+        <!-- início do contentor -->
+        <div class="container">
+          <div class="section">
+
+            <div class="divider"></div>
+            
+           
+
+            
+
+
+            <!--Início da Tabela Sensitiva-->
+            <div class="divider"></div>
+            <div id="hoverable-table">
+              <div class="row">
+                <div class="col s12 ">
+                  <table class="hoverable">
+                    <thead>
+                      <tr>
+                        <th data-field="interface" class="hide-on-small-only">Interface</th>
+                        <th data-field="usuario">Usuário</th>
+                        <th data-field="mac" class="hide-on-small-only">Endereço da Mídia</th>
+                        <th data-field="ip">Endereço IP</th>
+                        <th data-field="estado" class="hide-on-small-only">Estado</th>
+                        <th data-field="tempo" class="hide-on-small-only">Tempo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+]])
+
+local tab_dados = {}; //criando uma tabela vazia. (matriz) para gravar as linhas
+local cont = 1;//tabelas em Prisma começam por um e nao zero.
+local a = es.pabra('accel-cmd show sessions') //'a' armazena a saída do comando
+se a entao
+enquanto 1 inicio
+local lin = a:leia() 						//lê a primeira linha de 'a'
+se nao lin entao quebre fim;					//quebra o laço de repetição ao terminar as linhas.
+    se string.procure(lin, '|') entao 				// se a linha tiver '|' segue adiante
+      local t = string.analise(lin, '|');				//cada vez que tiver um '|' a string é quebrada
+        se t[13]:apare() 		== 'active' entao t[13] = 'ativa' 		//traduzindo a saída
+        senaose t[13]:apare() 	== 'start'  entao t[13] = 'aberta' 		//traduzindo a saída
+        senaose t[13]:apare() 	== 'finish' entao t[13] = 'caiu' 			//traduzindo a saída
+        fim
+		tab_dados[cont] = {}; //cada indice de tab.. é uma nova tabela.
+		tab_dados[cont].interface	= t[1] //pega o valor de t[1]
+		se t[3] == '                        ' entao tab_dados[cont].usuario  = 'CONECTANDO'
+		senao tab_dados[cont].usuario 	= t[3]:apare() //pega o valor de t[3] caso exista
+		fim
+		tab_dados[cont].mac		= t[5]		//pega o valor de t[5]
+		tab_dados[cont].ip		= t[7]		
+		tab_dados[cont].estado		= t[15]
+		tab_dados[cont].tempo		= t[17]
+		
+		cont = cont + 1; //incrementando para a proxima linha.
+	fim //se string.procure
+fim //se nao lin
+  a:feche();
+es.esvazie()  
+senao //se a
+  imprima("Erro ao ler dados")
+  sis.saia(1);   
+fim //se a
+
+para i = 2, #tab_dados inicio 	//de 1 até o tamanho de tab_dados
+								//aqui começa a preencher as colunas
+	imprima([[
+		<tr>
+                <td class="hide-on-small-only">]]..tab_dados[i].interface..[[</td>
+                <td>]]..tab_dados[i].usuario..[[</td>
+                <td class="hide-on-small-only">]]..tab_dados[i].mac..[[</td>
+                <td>]]..tab_dados[i].ip..[[</td>
+                <td class="hide-on-small-only">]]..tab_dados[i].estado..[[</td>
+                <td class="hide-on-small-only">]]..tab_dados[i].tempo..[[</td>
+                <td><form id="ping]]..i..[[" action="ping.prisma" method="get">
+		<input type="hidden" name="endereco" value="]]..tab_dados[i].ip..[["></input>
+		<a  id="botao]]..i..[[" class="waves-effect waves-light btn modal-trigger  light-blue" href="#modal1" >Pingar</a>
+		</form>
+		</td>					
+		</tr>
+		
+]])
+
+tabela.insira(TabelaJavascript,1,[[
+
+
+	
+
+$('#botao]]..i..[[').click(function(e){
+	e.preventDefault();
+	$('#resultado').html("");
+	$.ajax({
+	    type: 'GET',
+	    data: $('#ping]]..i..[[').serialize(),
+	    url: 'ping.prisma',
+	    success: function(data) {   
+	        $('#resultado').html(data);
+	    	}
+	    });
+});
+
+
+
+
+]]) 
+
+fim // fim do para i #tab_dados
+
+ComandosJavaScript = tabela.concat(TabelaJavascript)
+
+
+imprima([[
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+]])
+imprima([[<p align="right">						Total: ]]..#tab_dados..[[</p>]])
+
+imprima([[            
+<form action="ping.prisma" method="get" target="print_popup" onsubmit="window.open('about:blank','print_popup','width=700,height=200');">
+<input type="text" name="endereco"></input>
+<button class="btn waves-effect waves-light blue " type="submit">Pingar</button>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+				<div id="modal1" class="modal ">
+                  <div class="modal-content" id="resultado">
+
+                  </div>
+                </div>
+
+
+
+        </div>
+        <!-- fim do contentor -->
+
+      </section>
+      <!-- FIM DO CONTEÚDO -->
+
+
+    </div>
+    <!-- FIM DO EMBRULHO -->
+
+  </div>
+  <!-- FIM PRINCIPAL -->
+
+
+
+  <!-- //////////////////////////////////////////////////////////////////////////// -->
+
+  <!-- INÍCIO DO RODAPÉ -->
+  <footer class="page-footer">
+    <div class="footer-copyright">
+      <div class="container">
+        <span>Livre para usar e modificar desde que  mantenha o cabeçalho do autor  <a class="grey-text text-lighten-4" href="http://telemulti.net" target="_blank">Telemulti</a></span>
+        <span class="right"> Desenhado e Desenvolvido por  <a class="grey-text text-lighten-4" href="http://telemulti.net/">Rafael Alves Lemos</a></span>
+        </div>
+    </div>
+  </footer>
+    <!-- FIM DO RODAPÉ -->
+
+
+
+
+
+
+</body>
+
+</html>
+
+
+
+
+
+    <!--********************************************
+    					Scripts
+        ******************************************** -->
+    
+   
+    
+    <!-- Bibliotecas jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>    
+    <!-- JavaScript Materialize js-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
+
+
+    
+    
+    <script type="text/javascript">
+function ping(){
+$.ajax({
+    type: 'GET',
+    data: $('#ping').serialize(),
+    url: 'ping.prisma',
+    success: function(data) {   
+        $('#resultado').html(data);
+    }
+});
+}
+
+
+
+
+
+
+
+]]..ComandosJavaScript..[[
+
+
+  
+  $(window).load(function() {
+	$('.modal-trigger').leanModal();
+  });  
+
+  
+
+</script>
+
+
+
+
+
+]])
+
