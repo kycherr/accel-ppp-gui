@@ -1,0 +1,101 @@
+#!/usr/local/bin/prisma
+/**┌────────────────────────────────────────────────────────────────────┐ 
+ * │████████████████████████████████████████████████████████████████████│ 
+ * ├────────────────────────────────────────────────────────────────────┤ 
+ * │                 Accel-ppp-gui - Interface gráfica                  │ 
+ * │                       Ferramenta de latência                       │ 
+ * │    Autor  : Rafael Alves Lemos  - Telemos Multimidia LTDA          │ 
+ * │    Versão : 1.0                                                    │ 
+ * │    Licença: X                                                      │ 
+ * │    Dependências: prisma ou lua e servidor http com cgi habilitado  │ 
+ * │                  accel-ppp                                         │ 
+ * ├────────────────────────────────────────────────────────────────────┤ 
+ * │████████████████████████████████████████████████████████████████████│ 
+ * └────────────────────────────────────────────────────────────────────┘ 
+ * 
+ Copyright (c) <2017> <Rafael Alves Lemos - Telemos Multimídia LTDA>
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ pt.BR: ESTA LICENÇA PERMITE O USO, CÓPIA, MODIFICAÇÃO, PUBLICAÇÃO, DISTRIBUIÇÃO
+ SUBLICENCIAR, OU VENDER COPIAS DESTE APLICATIVO NAS SEGUINTES CONDIÇÕES:
+
+ A informação acima e sua permissão inclui todas as cópias ou porções substanciais 
+ deste sistema.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+
+
+ **/
+local cgi = inclua'pcgi';
+local html = inclua'html';
+local tab_dados = {}; //criando uma tabela vazia. (matriz) para gravar as linhas
+local cont = 1;//tabelas em Prisma começam por um e nao zero.
+local dados = cgi.va.var_string(); //recebe a variável ambiente query_string
+local endereco = cgi.obt_var(dados, 'endereco');
+CabecalhoHTML = "Content-Type: text/html; charset=utf-8\n\n"
+
+
+imprima(CabecalhoHTML)
+poe''
+poe''
+poe'<html><body style="font-family:monospace;">'
+
+
+se nao endereco ou endereco =='' entao imprima'Você precisa digitar um endereço' senao
+imprima('<p style="font-weight: bold">DISPARANDO CONTRA '..endereco..'</p>'	)
+a = es.pabra("ping -i 0.5 -c 4 -O "..endereco..' 2>&1')
+se a entao
+	enquanto 1 inicio
+	
+	local lin = a:leia();//pega uma linha de cada vez
+    se nao lin entao quebre fim;
+    se lin:procure('no answer') entao
+    //local t = string.analise(lin, ' ');
+    imprima('<p style="color:red">TEMPO ESGOTADO</p>')
+    //imprima(t[25]:troque('time(.*)','tempo%1')..' '..t[27]:corte(1,2))
+    senaose lin:procure('time=') entao
+    local t = string.analise(lin, '_');
+    imprima('<p>Resposta de '..t[1]:troque('(.*)from(.*)','%2'):corte(1,-5)..t[3]:troque('(.*)time=(.*)','tempo=%2')..' </p>')
+    //imprima(t[25]:troque('time(.*)','tempo%1')..' '..t[27]:corte(1,2))
+    senaose lin:procure('transmitted') entao
+    local t = string.analise(lin, ' ');
+    imprima('<p style="color: #009999">----------Estatísticas-----------</p>')
+    imprima('<p style="color: #009999">'..t[1]..' pacotes enviados, '..t[7].." recebidos\n"..t[11].." de perda, tempo gasto: "..t[19]..'</p>')
+    senaose lin:procure('unreachable') entao
+    local t = string.analise(lin, ' ');
+    imprima('<p style="color: red">Anfitrião inalcançável </p>')
+    imprima('<p style="color: red">A conexão pode ter caído </p>')
+    imprima('<p style="color: red">Recarregue a página </p>')
+    senaose lin:procure('---') entao
+    senaose lin:procure('rtt') entao
+    senaose lin:procure('PING') entao
+    senaose lin:procure('not known') entao
+    imprima('<p style="color: red">Não deu pra resolver o nome </p>')
+    imprima('<p style="color: red"Talvez o servidor de nomes esteja fora do ar </p>')
+    senao imprima(lin)
+    fim
+    
+    cont = cont + 1
+    fim
+    
+	senao
+imprima("Erro ao pingar")
+fim
+
+fim
+poe'</body></html>'
