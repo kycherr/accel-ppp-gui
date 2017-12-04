@@ -8,6 +8,8 @@ Graphical inteface for Accel-ppp
 
 -- Dependencies: Lua or Prisma
 
+http://linguagemprisma.br4.biz/blog/linguagemprisma-netdownload/
+
 É necessário habilitar CGI no apache para rodar este programa.
 
 Para usar em lua é necessário mudar as palavras chave e as bibliotecas do cabeçalho do arquivo accel-ppp-gui.prisma
