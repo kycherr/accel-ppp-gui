@@ -5,7 +5,7 @@
  *                                                                     *
  *     Author  : Rafael Alves Lemos  - Telemos Multimidia LTDA         *
  *     Version : 1.0                                                   *
- *     Licence : X                                                     *
+ *     License : X                                                     *
  *     Dependencies: prisma or lua and http server with cgi enabled    *
  *                   accel-ppp                                         *
  *                                                                     *
